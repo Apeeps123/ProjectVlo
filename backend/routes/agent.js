@@ -1,14 +1,14 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const { body, validationResult } = require('express-validator');
-const connection = require('../config/db');
-const fs = require('fs');
-const multer = require('multer');
-const path = require('path');
+const { body, validationResult } = require("express-validator");
+const connection = require("../config/db");
+const fs = require("fs");
+const multer = require("multer");
+const path = require("path");
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'public/images');
+    cb(null, "public/images");
   },
   filename: (req, file, cb) => {
     cb(null, Date.now() + path.extname(file.originalname));
@@ -16,36 +16,35 @@ const storage = multer.diskStorage({
 });
 
 const fileFilter = (req, file, cb) => {
-  if (
-    file.mimetype === 'image/jpeg' ||
-    file.mimetype === 'image/png'   ) {
+  if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
     cb(null, true);
   } else {
-    cb(new Error('Jenis file tidak diizinkan'), false);
+    cb(new Error("Jenis file tidak diizinkan"), false);
   }
 };
 
 const upload = multer({ storage: storage, fileFilter: fileFilter });
 
-router.get('/', (req, res) => {
-  connection.query('SELECT * FROM agent', (err, rows) => {
-    if (err) {
-      console.error('Error retrieving agent data:', err);
-      return res.status(500).json({ status: false, message: 'Server Error' });
+router.get("/", (req, res) => {
+  connection.query(
+    "SELECT a.id, a.nama, a.bio, b.role AS role, b.icon AS icon, a.gambar FROM agent a JOIN roles b ON a.role = b.id",
+    (err, rows) => {
+      if (err) {
+        console.error("Error retrieving agent data:", err);
+        return res.status(500).json({ status: false, message: "Server Error" });
+      }
+      console.log("Agent data retrieved successfully");
+      return res
+        .status(200)
+        .json({ status: true, message: "Data Agent", data: rows });
     }
-    console.log('Agent data retrieved successfully');
-    return res.status(200).json({ status: true, message: 'Data Agent', data: rows });
-  });
+  );
 });
 
 router.post(
-  '/store',
-  upload.fields([{ name: 'gambar', maxCount: 1 }]),
-  [
-    body('nama').notEmpty(),
-    body('role').notEmpty(),
-    body('bio').notEmpty(),
-  ],
+  "/store",
+  upload.fields([{ name: "gambar", maxCount: 1 }]),
+  [body("nama").notEmpty(), body("role").notEmpty(), body("bio").notEmpty()],
   (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -53,7 +52,7 @@ router.post(
     }
 
     const { nama, role, bio } = req.body;
-    const gambar = req.files['gambar'][0].filename;
+    const gambar = req.files["gambar"][0].filename;
 
     const data = {
       nama,
@@ -62,16 +61,16 @@ router.post(
       gambar,
     };
 
-    connection.query('INSERT INTO agent SET ?', data, (err, rows) => {
+    connection.query("INSERT INTO agent SET ?", data, (err, rows) => {
       if (err) {
         return res.status(500).json({
           status: false,
-          message: 'Server Error',
+          message: "Server Error",
         });
       } else {
         return res.status(201).json({
           status: true,
-          message: 'Success..!',
+          message: "Success..!",
           data: rows[0],
         });
       }
@@ -79,95 +78,111 @@ router.post(
   }
 );
 
-router.patch('/update/:id', upload.fields([{ name: 'gambar', maxCount: 1 }]), (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(422).json({ errors: errors.array() });
-  }
-
-  const id = req.params.id;
-  const { nama, role, bio } = req.body;
-  const gambar = req.files['gambar'] ? req.files['gambar'][0].filename : null;
-
-  connection.query(`SELECT * FROM agent WHERE id = ?`, [id], (err, rows) => {
-    if (err) {
-      return res.status(500).json({
-        status: false,
-        message: 'Server Error',
-      });
-    }
-    if (rows.length === 0) {
-      return res.status(404).json({
-        status: false,
-        message: 'Not Found',
-      });
+router.patch(
+  "/update/:id",
+  upload.fields([{ name: "gambar", maxCount: 1 }]),
+  (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.array() });
     }
 
-    const gambarLama = rows[0].gambar;
+    const id = req.params.id;
+    const { nama, role, bio } = req.body;
+    const gambar = req.files["gambar"] ? req.files["gambar"][0].filename : null;
 
-    if (gambarLama && gambar) {
-      const pathGambarLama = path.join(__dirname, '../public/images', gambarLama);
-      fs.unlinkSync(pathGambarLama);
-    }
-
-    const data = {
-      nama,
-      role,
-      bio,
-    };
-    if (gambar) {
-      data.gambar = gambar;
-    }
-
-    connection.query('UPDATE agent SET ? WHERE id = ?', [data, id], (err, rows) => {
+    connection.query(`SELECT * FROM agent WHERE id = ?`, [id], (err, rows) => {
       if (err) {
         return res.status(500).json({
           status: false,
-          message: 'Server Error',
+          message: "Server Error",
         });
       }
-      return res.status(200).json({
-        status: true,
-        message: 'Update Success..!',
-      });
-    });
-  });
-});
+      if (rows.length === 0) {
+        return res.status(404).json({
+          status: false,
+          message: "Not Found",
+        });
+      }
 
-router.delete('/delete/:id', (req, res) => {
+      const gambarLama = rows[0].gambar;
+
+      if (gambarLama && gambar) {
+        const pathGambarLama = path.join(
+          __dirname,
+          "../public/images",
+          gambarLama
+        );
+        fs.unlinkSync(pathGambarLama);
+      }
+
+      const data = {
+        nama,
+        role,
+        bio,
+      };
+      if (gambar) {
+        data.gambar = gambar;
+      }
+
+      connection.query(
+        "UPDATE agent SET ? WHERE id = ?",
+        [data, id],
+        (err, rows) => {
+          if (err) {
+            return res.status(500).json({
+              status: false,
+              message: "Server Error",
+            });
+          }
+          return res.status(200).json({
+            status: true,
+            message: "Update Success..!",
+          });
+        }
+      );
+    });
+  }
+);
+
+router.delete("/delete/:id", (req, res) => {
   const id = req.params.id;
 
   connection.query(`SELECT * FROM agent WHERE id = ?`, [id], (err, rows) => {
     if (err) {
       return res.status(500).json({
         status: false,
-        message: 'Server Error',
+        message: "Server Error",
       });
     }
     if (rows.length === 0) {
       return res.status(404).json({
         status: false,
-        message: 'Not Found',
+        message: "Not Found",
       });
     }
 
     const gambarLama = rows[0].gambar;
 
     if (gambarLama) {
-      const pathGambarLama = path.join(__dirname, '../public/images', gambarLama);
+      const pathGambarLama = path.join(
+        __dirname,
+        "../public/images",
+        gambarLama
+      );
       fs.unlinkSync(pathGambarLama);
     }
 
-    connection.query('DELETE FROM agent WHERE id = ?', [id], (err, rows) => {
+    connection.query("DELETE FROM agent WHERE id = ?", [id], (err, rows) => {
       if (err) {
         return res.status(500).json({
           status: false,
-          message: 'Server Error',
+          message: "Server Error",
         });
       }
       return res.status(200).json({
         status: true,
-        message: 'Data has been deleted!',
+        message: "Data has been deleted!",
       });
     });
   });

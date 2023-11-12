@@ -1,0 +1,79 @@
+/* Tambahkan CSS di file Anda atau dalam komponen Anda jika menggunakan CSS-in-JS */
+.gallery {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 50px;
+}
+
+.gallery-item {
+  position: relative;
+  margin: 10px;
+  overflow: hidden;
+  background: transparent;
+  box-shadow: 0 4px 8px rgb(0, 0, 255)
+}
+
+.gallery-item::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to right, rgb(255, 0, 0), transparent); /* Ganti warna dan transparansi sesuai keinginan Anda */
+  z-index: -1; /* Pastikan lapisan warna berada di bawah .gallery-item */
+  opacity: 0;
+  transform: translateX(-100%);
+  transition: transform 0.5s, opacity 0.5s;
+}
+
+.gallery-item:hover::before {
+  transform: translateX(100%);
+  opacity: 1;
+}
+
+.gallery-item:hover {
+  transform: scale(1.05);
+  background: rgba(255, 0, 242, 0.6); /* Warna latar belakang dengan opacity lebih tinggi */
+}
+
+.gallery-image {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.gallery-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #261b8e8f;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.gallery-item:hover .gallery-overlay {
+  opacity: 1;
+}
+
+.gallery-button {
+  background: rgba(255, 255, 255, 0.2); /* Warna latar belakang tombol */
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background 0.3s;
+}
+
+.gallery-button:hover {
+  background: rgba(0, 246, 209, 0.623); /* Warna latar belakang tombol saat hover */
+}

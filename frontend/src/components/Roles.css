@@ -1,0 +1,30 @@
+.roles-container {
+    padding: 100px;
+    /* display: flex;
+    flex-direction: column; */
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* 100% dari tinggi viewport */
+    color: aliceblue;
+  }
+  
+  .video-background {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
+  }
+  
+  .table {
+    margin-top: 20px;
+    padding: 20px;
+    width: 100%;
+  }
+  
+  .modal {
+    color: #000;
+  }
+  

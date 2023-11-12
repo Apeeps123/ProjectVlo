@@ -1,0 +1,44 @@
+.roles-container {
+    padding: 100px;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; 
+    color: aliceblue;
+  }
+  
+  .video-background {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
+  }
+  
+  .table {
+    margin-top: 20px;
+    padding: 20px;
+    width: 100%;
+  }
+  
+  .modal {
+    color: #000;
+  }
+  .centered-form {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.726); 
+    padding: 20px;
+    width: 50%;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgb(255, 0, 0);
+    text-align: left;
+    color: white; 
+    z-index: 1;
+  }.form-control::placeholder,
+  .form-select::placeholder {
+    color: rgb(227, 49, 49) !important;
+  }
