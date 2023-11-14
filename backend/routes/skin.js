@@ -4,6 +4,7 @@ const { body, validationResult } = require("express-validator");
 const connection = require("../config/db");
 const fs = require("fs");
 const multer = require("multer");
+const authenticateToken = require("../routes/auth/middleware/authenticateToken");
 const path = require("path");
 
 const storage = multer.diskStorage({
@@ -25,7 +26,7 @@ const fileFilter = (req, file, cb) => {
 
 const upload = multer({ storage: storage, fileFilter: fileFilter });
 
-router.get("/", (req, res) => {
+router.get("/", authenticateToken, (req, res) => {
   connection.query(
     "SELECT a.id, a.skin, a.gambarSkin, a.nama , b.nama AS weaponName FROM skin a JOIN weapon b ON a.nama = b.nama",
     (err, rows) => {
@@ -42,7 +43,7 @@ router.get("/", (req, res) => {
 });
 
 // Update your SQL query to include the weapon name
-router.get("/detail/:nama", (req, res) => {
+router.get("/detail/:nama", authenticateToken, (req, res) => {
   connection.query(
     "SELECT a.id, a.skin, a.gambarSkin, a.nama , b.nama AS weaponName FROM skin a JOIN weapon b ON a.nama = b.nama WHERE a.nama = ?",
     [req.params.nama],
@@ -60,7 +61,7 @@ router.get("/detail/:nama", (req, res) => {
 });
 
 router.post(
-  "/store",
+  "/store", authenticateToken,
   upload.single("gambarSkin"),
   [body("skin").notEmpty()],
   [body("nama").notEmpty()],
@@ -96,7 +97,7 @@ router.post(
   }
 );
 
-router.patch("/update/:id", upload.single("gambarSkin"), (req, res) => {
+router.patch("/update/:id",  authenticateToken, upload.single("gambarSkin"), (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(422).json({ errors: errors.array() });
@@ -157,7 +158,7 @@ router.patch("/update/:id", upload.single("gambarSkin"), (req, res) => {
   });
 });
 
-router.delete("/delete/:id", (req, res) => {
+router.delete("/delete/:id", authenticateToken, (req, res) => {
   const id = req.params.id;
 
   connection.query(`SELECT * FROM skin WHERE id = ?`, [id], (err, rows) => {

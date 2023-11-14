@@ -4,6 +4,7 @@ const { body, validationResult } = require("express-validator");
 const connection = require("../config/db");
 const fs = require("fs");
 const multer = require("multer");
+const authenticateToken = require("../routes/auth/middleware/authenticateToken");
 const path = require("path");
 
 const storage = multer.diskStorage({
@@ -25,7 +26,7 @@ const fileFilter = (req, file, cb) => {
 
 const upload = multer({ storage: storage, fileFilter: fileFilter });
 
-router.get("/", (req, res) => {
+router.get("/", authenticateToken, (req, res) => {
   connection.query(
     "SELECT a.id, a.nama, a.bio, b.role AS role, b.icon AS icon, a.gambar FROM agent a JOIN roles b ON a.role = b.id",
     (err, rows) => {
@@ -42,7 +43,7 @@ router.get("/", (req, res) => {
 });
 
 router.post(
-  "/store",
+  "/store", authenticateToken,
   upload.fields([{ name: "gambar", maxCount: 1 }]),
   [body("nama").notEmpty(), body("role").notEmpty(), body("bio").notEmpty()],
   (req, res) => {
@@ -79,7 +80,7 @@ router.post(
 );
 
 router.patch(
-  "/update/:id",
+  "/update/:id", authenticateToken,
   upload.fields([{ name: "gambar", maxCount: 1 }]),
   (req, res) => {
     const errors = validationResult(req);
@@ -145,7 +146,7 @@ router.patch(
   }
 );
 
-router.delete("/delete/:id", (req, res) => {
+router.delete("/delete/:id", authenticateToken, (req, res) => {
   const id = req.params.id;
 
   connection.query(`SELECT * FROM agent WHERE id = ?`, [id], (err, rows) => {

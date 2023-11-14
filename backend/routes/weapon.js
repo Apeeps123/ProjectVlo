@@ -4,6 +4,7 @@ const { body, validationResult } = require("express-validator");
 const connection = require("../config/db");
 const fs = require("fs");
 const multer = require("multer");
+const authenticateToken = require("../routes/auth/middleware/authenticateToken");
 const path = require("path");
 
 const storage = multer.diskStorage({
@@ -28,7 +29,7 @@ const upload = multer({ storage: storage, fileFilter: fileFilter });
 // Mendapatkan semua data senjata
 
 // "SELECT a.id, a.nama, a.bio, b.role AS role, b.icon AS icon, a.gambar FROM agent a JOIN roles b ON a.role = b.id",
-router.get("/", (req, res) => {
+router.get("/", authenticateToken, (req, res) => {
   connection.query("SELECT * from weapon", (err, rows) => {
     if (err) {
       console.error("Error retrieving weapon data:", err);
@@ -43,7 +44,7 @@ router.get("/", (req, res) => {
 
 // Menambahkan senjata baru
 router.post(
-  "/store",
+  "/store", authenticateToken,
   upload.single("gambarWpn"),
   [body("nama").notEmpty(), body("type").notEmpty()],
   (req, res) => {
@@ -77,7 +78,7 @@ router.post(
   }
 );
 
-router.patch("/update/:id", upload.single("gambarWpn"), (req, res) => {
+router.patch("/update/:id", authenticateToken, upload.single("gambarWpn"), (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(422).json({ errors: errors.array() });
@@ -138,7 +139,7 @@ router.patch("/update/:id", upload.single("gambarWpn"), (req, res) => {
 });
 
 // Menghapus data senjata berdasarkan ID
-router.delete("/delete/:id", (req, res) => {
+router.delete("/delete/:id", authenticateToken, (req, res) => {
   const id = req.params.id;
 
   connection.query(`SELECT * FROM weapon WHERE id = ?`, [id], (err, rows) => {

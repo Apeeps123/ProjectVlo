@@ -4,6 +4,7 @@ const { body, validationResult } = require("express-validator");
 const connection = require("../config/db");
 const fs = require("fs");
 const multer = require("multer");
+const authenticateToken = require("../routes/auth/middleware/authenticateToken");
 const path = require("path");
 
 const storage = multer.diskStorage({
@@ -25,7 +26,7 @@ const fileFilter = (req, file, cb) => {
 
 const upload = multer({ storage: storage, fileFilter: fileFilter });
 
-router.get("/", (req, res) => {
+router.get("/",  authenticateToken, (req, res) => {
   connection.query("SELECT * FROM roles", (err, rows) => {
     if (err) {
       console.error("Error retrieving roles data:", err);
@@ -39,7 +40,7 @@ router.get("/", (req, res) => {
 });
 
 router.post(
-  "/store",
+  "/store", authenticateToken,
   upload.single("icon"),
   [body("role").notEmpty()],
   (req, res) => {
@@ -73,7 +74,7 @@ router.post(
   }
 );
 
-router.patch("/update/:id", upload.single("icon"), (req, res) => {
+router.patch("/update/:id", authenticateToken, upload.single("icon"), (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(422).json({ errors: errors.array() });
@@ -127,7 +128,7 @@ router.patch("/update/:id", upload.single("icon"), (req, res) => {
     );
   });
 });
-router.delete("/delete/:id", (req, res) => {
+router.delete("/delete/:id", authenticateToken, (req, res) => {
   const id = req.params.id;
 
   connection.query("DELETE FROM roles WHERE id = ?", [id], (err, result) => {
