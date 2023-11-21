@@ -6,6 +6,8 @@ import videoSource from "../Asset/omen2.mp4";
 import "../../src/components/Weapon.css";
 
 const url = "http://localhost:3000/static/";
+const token = localStorage.getItem("token");
+const isLoggedIn = !!token;
 
 function Weapon() {
   const [weaponList, setWeaponList] = useState([]);
@@ -80,6 +82,7 @@ function Weapon() {
         {
           headers: {
             "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -95,10 +98,12 @@ function Weapon() {
 
   const handleDelete = (id) => {
     console.log("Trying to delete data with ID:", id);
-
+    const headers = {
+      Authorization: `Bearer ${token}`,
+    };
     if (window.confirm("Are you sure you want to delete this weapon?")) {
       axios
-        .delete(`http://localhost:3000/weapon/delete/${id}`)
+        .delete(`http://localhost:3000/weapon/delete/${id}`, { headers })
         .then((response) => {
           console.log("Data berhasil dihapus");
           const updateWeapon = weaponList.filter((weapon) => weapon.id !== id);
@@ -200,7 +205,7 @@ function Weapon() {
       </video>
       <Container>
         <Row>
-          <div className="gallery">
+          <div className="gallery" style={{ marginTop: "90px" }}>
             {weaponList.map((weapon, index) => (
               <div className="gallery-item" key={weapon.id}>
                 <img
@@ -212,12 +217,14 @@ function Weapon() {
                   <div>{weapon.nama}</div>
                   <div>{weapon.type}</div>
                   <div style={{ display: "flex", gap: "2px" }}>
-                    <button
-                      className="gallery-button"
-                      onClick={() => handleShowEditModal(weapon.id)}
-                    >
-                      Edit
-                    </button>
+                    {isLoggedIn && (
+                      <button
+                        className="gallery-button"
+                        onClick={() => handleShowEditModal(weapon.id)}
+                      >
+                        Edit
+                      </button>
+                    )}
                     <button
                       className="gallery-button"
                       onClick={() => {
@@ -226,12 +233,14 @@ function Weapon() {
                     >
                       Lihat Skin
                     </button>
-                    <button
-                      onClick={() => handleDelete(weapon.id)}
-                      className="gallery-button"
-                    >
-                      Delete
-                    </button>
+                    {isLoggedIn && (
+                      <button
+                        onClick={() => handleDelete(weapon.id)}
+                        className="gallery-button"
+                      >
+                        Delete
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>

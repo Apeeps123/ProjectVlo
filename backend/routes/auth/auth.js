@@ -19,7 +19,7 @@ router.post("/register", [], (req, res) => {
       return res.status(500).json({ error: "Server Error" });
     }
     if (results.length > 0) {
-      return res.status(409).json({ error: "Ni hao arasoh" });
+      return res.status(409).json({ error: "Pengguna sudah terdaftar" });
     }
     const insertUserQuery =
       "INSERT INTO users (username, password) VALUES (?, ?)";

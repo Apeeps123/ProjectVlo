@@ -4,8 +4,6 @@ const port = 3000;
 const cors = require("cors");
 app.use(cors());
 const path = require("path");
-const auth = require("./routes/auth/auth");
-
 app.use("/static", express.static(path.join(__dirname, "public/images")));
 
 const bodyPs = require("body-parser");
@@ -23,6 +21,9 @@ app.use("/weapon", weaponRoutes);
 
 const skinRoutes = require("./routes/skin");
 app.use("/skin", skinRoutes);
+
+const auth = require("./routes/auth/auth");
+app.use("/api/auth", auth);
 
 app.listen(port, () => {
   console.log(`Server berjalan di http://localhost:${port}`);

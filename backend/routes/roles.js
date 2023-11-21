@@ -26,7 +26,7 @@ const fileFilter = (req, file, cb) => {
 
 const upload = multer({ storage: storage, fileFilter: fileFilter });
 
-router.get("/",  authenticateToken, (req, res) => {
+router.get("/", (req, res) => {
   connection.query("SELECT * FROM roles", (err, rows) => {
     if (err) {
       console.error("Error retrieving roles data:", err);
@@ -40,7 +40,8 @@ router.get("/",  authenticateToken, (req, res) => {
 });
 
 router.post(
-  "/store", authenticateToken,
+  "/store",
+  authenticateToken,
   upload.single("icon"),
   [body("role").notEmpty()],
   (req, res) => {
@@ -74,60 +75,65 @@ router.post(
   }
 );
 
-router.patch("/update/:id", authenticateToken, upload.single("icon"), (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(422).json({ errors: errors.array() });
-  }
-
-  const id = req.params.id;
-  const { role } = req.body;
-  const icon = req.file ? req.file.filename : null;
-
-  connection.query(`SELECT * FROM roles WHERE id = ?`, [id], (err, rows) => {
-    if (err) {
-      return res.status(500).json({
-        status: false,
-        message: "Server Error",
-      });
-    }
-    if (rows.length === 0) {
-      return res.status(404).json({
-        status: false,
-        message: "Role not found",
-      });
+router.patch(
+  "/update/:id",
+  authenticateToken,
+  upload.single("icon"),
+  (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.array() });
     }
 
-    const iconLama = rows[0].icon;
+    const id = req.params.id;
+    const { role } = req.body;
+    const icon = req.file ? req.file.filename : null;
 
-    if (iconLama && icon) {
-      const pathIconLama = path.join(__dirname, "../public/images", iconLama);
-      fs.unlinkSync(pathIconLama);
-    }
-
-    const data = {
-      role,
-      icon: icon || iconLama,
-    };
-
-    connection.query(
-      "UPDATE roles SET ? WHERE id = ?",
-      [data, id],
-      (err, rows) => {
-        if (err) {
-          return res.status(500).json({
-            status: false,
-            message: "Server Error",
-          });
-        }
-        return res.status(200).json({
-          status: true,
-          message: "Role updated successfully",
+    connection.query(`SELECT * FROM roles WHERE id = ?`, [id], (err, rows) => {
+      if (err) {
+        return res.status(500).json({
+          status: false,
+          message: "Server Error",
         });
       }
-    );
-  });
-});
+      if (rows.length === 0) {
+        return res.status(404).json({
+          status: false,
+          message: "Role not found",
+        });
+      }
+
+      const iconLama = rows[0].icon;
+
+      if (iconLama && icon) {
+        const pathIconLama = path.join(__dirname, "../public/images", iconLama);
+        fs.unlinkSync(pathIconLama);
+      }
+
+      const data = {
+        role,
+        icon: icon || iconLama,
+      };
+
+      connection.query(
+        "UPDATE roles SET ? WHERE id = ?",
+        [data, id],
+        (err, rows) => {
+          if (err) {
+            return res.status(500).json({
+              status: false,
+              message: "Server Error",
+            });
+          }
+          return res.status(200).json({
+            status: true,
+            message: "Role updated successfully",
+          });
+        }
+      );
+    });
+  }
+);
 router.delete("/delete/:id", authenticateToken, (req, res) => {
   const id = req.params.id;
 

@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import "../components/AddAgent.css";
 import "react-toastify/dist/ReactToastify.css";
 import videoSource from "../Asset/omen.mp4";
+const token = localStorage.getItem("token");
 
 function AddAgent() {
   const [roles, setRoles] = useState([]);
@@ -58,6 +59,7 @@ function AddAgent() {
         {
           headers: {
             "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
           },
         }
       );

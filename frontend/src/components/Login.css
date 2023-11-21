@@ -1,0 +1,23 @@
+/* Gunakan kelas "container" untuk mengatur tata letak ke tengah */
+.container {
+    text-align: center;
+    margin: auto;
+    width: 50%;
+    padding: 20px;
+  }
+  
+  /* Tambahkan beberapa gaya tambahan sesuai kebutuhan Anda */
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  /* Atur lebar input agar lebih lebar */
+  .form-control {
+    width: 100%;
+  }
+  
+  /* Atur margin atas pada tombol */
+  .btn {
+    margin-top: 10px;
+  }
+  

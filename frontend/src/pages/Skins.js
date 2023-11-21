@@ -5,6 +5,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import "../components/Skins.css";
 import videoSource from "../Asset/cypher.mp4";
 const url = "http://localhost:3000/static/";
+const token = localStorage.getItem("token");
+const isLoggedIn = !!token;
 
 function Skins() {
   const [skins, setSkins] = useState([]);
@@ -129,6 +131,7 @@ function Skins() {
         {
           headers: {
             "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -139,16 +142,17 @@ function Skins() {
       setShowEditModal(false);
     } catch (error) {
       console.error("Kesalahan:", error);
-      // Display a user-friendly error message here
     }
   };
 
   const handleDelete = (id) => {
     console.log("Trying to delete data with ID:", id);
-
+    const headers = {
+      Authorization: `Bearer ${token}`,
+    };
     if (window.confirm("Are you sure you want to delete this weapon?")) {
       axios
-        .delete(`http://localhost:3000/skin/delete/${id}`)
+        .delete(`http://localhost:3000/skin/delete/${id}`, { headers })
         .then((response) => {
           console.log("Data berhasil dihapus");
           const updateSkin = skins.filter((skin) => skin.id !== id);
@@ -206,20 +210,23 @@ function Skins() {
                     }
                   </div>
                   <div className="button-container">
-                    <button
-                      className="gallery-button edit-button"
-                      style={{ marginRight: "5px" }}
-                      onClick={() => handleShowEditModal(skin.id)}
-                    >
-                      Edit
-                    </button>
-
-                    <button
-                      onClick={() => handleDelete(skin.id)}
-                      className="gallery-button delete-button"
-                    >
-                      Delete
-                    </button>
+                    {isLoggedIn && (
+                      <button
+                        className="gallery-button edit-button"
+                        style={{ marginRight: "5px" }}
+                        onClick={() => handleShowEditModal(skin.id)}
+                      >
+                        Edit
+                      </button>
+                    )}
+                    {isLoggedIn && (
+                      <button
+                        onClick={() => handleDelete(skin.id)}
+                        className="gallery-button delete-button"
+                      >
+                        Delete
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>

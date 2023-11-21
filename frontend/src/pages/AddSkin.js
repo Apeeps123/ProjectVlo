@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import videoSource from "../Asset/viper5.mp4";
 import "../components/AddSkin.css";
+const token = localStorage.getItem("token");
 
 function AddSkin() {
   const [skin, setSkin] = useState("");
@@ -57,6 +58,7 @@ function AddSkin() {
         {
           headers: {
             "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
           },
         }
       );

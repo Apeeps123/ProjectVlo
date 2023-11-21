@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import videoSource from "../Asset/viper2.mp4";
 import "../components/AddWeapon.css";
+const token = localStorage.getItem("token");
 
 function AddWeapon() {
   const [nama, setNama] = useState("");
@@ -41,6 +42,7 @@ function AddWeapon() {
         {
           headers: {
             "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -55,7 +57,6 @@ function AddWeapon() {
 
   const handleType = (e) => {
     setType(e.target.value);
-    // Reset nama to default value based on selected type
     setNama(getDefaultWeaponName(e.target.value));
   };
 
@@ -121,7 +122,12 @@ function AddWeapon() {
 
           <div className="mb-3">
             <label className="form-label text-white">Type:</label>
-            <select className="form-select" value={type} onChange={handleType}>
+            <select
+              className="form-select"
+              value={type}
+              onChange={handleType}
+              style={{ background: "rgba(46, 46, 82, 0.433) ", color: "white" }}
+            >
               {[
                 "Sidearms",
                 "SMGs",
@@ -140,7 +146,12 @@ function AddWeapon() {
 
           <div className="mb-3">
             <label className="form-label text-white">Nama:</label>
-            <select className="form-select" value={nama} onChange={handleNama}>
+            <select
+              className="form-select"
+              style={{ background: "rgba(46, 46, 82, 0.433) ", color: "white" }}
+              value={nama}
+              onChange={handleNama}
+            >
               {getWeaponOptionsByType(type).map((weapon) => (
                 <option key={weapon} value={weapon}>
                   {weapon}
@@ -156,6 +167,7 @@ function AddWeapon() {
               className="form-control"
               accept="image/*"
               onChange={handleGambarSkin}
+              style={{ background: "rgba(46, 46, 82, 0.433) ", color: "white" }}
             />
           </div>
 

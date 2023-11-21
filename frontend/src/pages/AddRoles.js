@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import videoSource from "../Asset/pnx.mp4";
 import "../components/AddRoles.css";
+const token = localStorage.getItem("token");
 
 function AddRoles() {
   const [role, setRole] = useState("");
@@ -32,6 +33,7 @@ function AddRoles() {
         {
           headers: {
             "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
           },
         }
       );

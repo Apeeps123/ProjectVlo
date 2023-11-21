@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import videoSource from "../Asset/viper.mp4";
 import "../components/Roles.css";
 const url = "http://localhost:3000/static/";
+const token = localStorage.getItem("token");
+const isLoggedIn = !!token;
 
 function Roles() {
   const [Roles, setRoles] = useState([]);
@@ -79,6 +81,7 @@ function Roles() {
         {
           headers: {
             "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -93,10 +96,12 @@ function Roles() {
 
   const handleDelete = (id) => {
     console.log("Trying to delete data with ID:", id);
-
+    const headers = {
+      Authorization: `Bearer ${token}`,
+    };
     if (window.confirm("Are you sure you want to delete this role?")) {
       axios
-        .delete(`http://localhost:3000/roles/delete/${id}`)
+        .delete(`http://localhost:3000/roles/delete/${id}`, { headers })
         .then((response) => {
           console.log("Data berhasil dihapus");
           const updateRoles = Roles.filter((role) => role.id !== id);
@@ -130,7 +135,7 @@ function Roles() {
               <th scope="col">No</th>
               <th scope="col">Nama Role</th>
               <th scope="col">Icon</th>
-              <th scope="col">Actions</th>
+              {isLoggedIn && <th scope="col">Actions</th>}
             </tr>
           </thead>
           <tbody>
@@ -151,20 +156,39 @@ function Roles() {
                   <br />
                 </td>{" "}
                 <td>
-                  <button
-                    onClick={() => handleShowEditModal(role.id)}
-                    className="btn btn-sm btn-info"
-                    style={{ marginRight: "10px" }}
-                  >
-                    Edit
-                  </button>
-
-                  <button
-                    onClick={() => handleDelete(role.id)}
-                    className="btn btn-sm btn-danger"
-                  >
-                    Hapus
-                  </button>
+                  {isLoggedIn && (
+                    <svg
+                      onClick={() => handleShowEditModal(role.id)}
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="30"
+                      height="30"
+                      fill="yellow"
+                      class="bi bi-pencil-square"
+                      viewBox="0 0 16 16"
+                      style={{ marginRight: "20px", cursor: "pointer" }}
+                    >
+                      <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                      <path
+                        fill-rule="evenodd"
+                        d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"
+                      />
+                    </svg>
+                  )}
+                  {isLoggedIn && (
+                    <svg
+                      onClick={() => handleDelete(role.id)}
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="30"
+                      height="30"
+                      fill="red"
+                      class="bi bi-trash"
+                      viewBox="0 0 16 16"
+                      style={{ cursor: "pointer" }}
+                    >
+                      <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z" />
+                      <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z" />
+                    </svg>
+                  )}
                 </td>
               </tr>
             ))}

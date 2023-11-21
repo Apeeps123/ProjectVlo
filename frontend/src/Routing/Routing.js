@@ -1,5 +1,7 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Agent from "../pages/agent";
+import Login from "../pages/auth/login";
+import Register from "../pages/auth/Register";
 import AddAgent from "../pages/AddAgent";
 import CustomNavbar from "../components/Navbar";
 import Dashbord from "../components/Dashboard";
@@ -27,6 +29,8 @@ function Routing() {
           <Route path="/skin/detail/:nama" element={<Skins />} />
           <Route path="/skin/add" element={<AddSkin />} />
           <Route path="/skin" element={<Skin />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
         </Routes>
       </div>
     </Router>

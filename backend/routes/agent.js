@@ -26,7 +26,7 @@ const fileFilter = (req, file, cb) => {
 
 const upload = multer({ storage: storage, fileFilter: fileFilter });
 
-router.get("/", authenticateToken, (req, res) => {
+router.get("/", (req, res) => {
   connection.query(
     "SELECT a.id, a.nama, a.bio, b.role AS role, b.icon AS icon, a.gambar FROM agent a JOIN roles b ON a.role = b.id",
     (err, rows) => {
@@ -43,7 +43,8 @@ router.get("/", authenticateToken, (req, res) => {
 });
 
 router.post(
-  "/store", authenticateToken,
+  "/store",
+  authenticateToken,
   upload.fields([{ name: "gambar", maxCount: 1 }]),
   [body("nama").notEmpty(), body("role").notEmpty(), body("bio").notEmpty()],
   (req, res) => {
@@ -80,7 +81,8 @@ router.post(
 );
 
 router.patch(
-  "/update/:id", authenticateToken,
+  "/update/:id",
+  authenticateToken,
   upload.fields([{ name: "gambar", maxCount: 1 }]),
   (req, res) => {
     const errors = validationResult(req);

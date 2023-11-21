@@ -26,10 +26,7 @@ const fileFilter = (req, file, cb) => {
 
 const upload = multer({ storage: storage, fileFilter: fileFilter });
 
-// Mendapatkan semua data senjata
-
-// "SELECT a.id, a.nama, a.bio, b.role AS role, b.icon AS icon, a.gambar FROM agent a JOIN roles b ON a.role = b.id",
-router.get("/", authenticateToken, (req, res) => {
+router.get("/", (req, res) => {
   connection.query("SELECT * from weapon", (err, rows) => {
     if (err) {
       console.error("Error retrieving weapon data:", err);
@@ -44,7 +41,8 @@ router.get("/", authenticateToken, (req, res) => {
 
 // Menambahkan senjata baru
 router.post(
-  "/store", authenticateToken,
+  "/store",
+  authenticateToken,
   upload.single("gambarWpn"),
   [body("nama").notEmpty(), body("type").notEmpty()],
   (req, res) => {
@@ -78,65 +76,70 @@ router.post(
   }
 );
 
-router.patch("/update/:id", authenticateToken, upload.single("gambarWpn"), (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(422).json({ errors: errors.array() });
-  }
-
-  const id = req.params.id;
-  const { nama, type } = req.body;
-  const gambarWpn = req.file ? req.file.filename : null;
-
-  connection.query(`SELECT * FROM weapon WHERE id = ?`, [id], (err, rows) => {
-    if (err) {
-      return res.status(500).json({
-        status: false,
-        message: "Server Error",
-      });
-    }
-    if (rows.length === 0) {
-      return res.status(404).json({
-        status: false,
-        message: "Weapon not found",
-      });
+router.patch(
+  "/update/:id",
+  authenticateToken,
+  upload.single("gambarWpn"),
+  (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.array() });
     }
 
-    const gambarWpnLama = rows[0].gambarWpn;
+    const id = req.params.id;
+    const { nama, type } = req.body;
+    const gambarWpn = req.file ? req.file.filename : null;
 
-    if (gambarWpnLama && gambarWpn) {
-      const pathGambarWpnLama = path.join(
-        __dirname,
-        "../public/images",
-        gambarWpnLama
-      );
-      fs.unlinkSync(pathGambarWpnLama);
-    }
-
-    const data = {
-      nama,
-      type,
-      gambarWpn: gambarWpn || gambarWpnLama,
-    };
-
-    connection.query(
-      "UPDATE weapon SET ? WHERE id = ?",
-      [data, id],
-      (err, rows) => {
-        if (err) {
-          return res.status(500).json({
-            status: false,
-            message: "Server Error",
-          });
-        }
-        return res.status(200).json({
-          status: true,
-          message: "Weapon updated successfully",
+    connection.query(`SELECT * FROM weapon WHERE id = ?`, [id], (err, rows) => {
+      if (err) {
+        return res.status(500).json({
+          status: false,
+          message: "Server Error",
         });
       }
-    );
-  });
-});
+      if (rows.length === 0) {
+        return res.status(404).json({
+          status: false,
+          message: "Weapon not found",
+        });
+      }
+
+      const gambarWpnLama = rows[0].gambarWpn;
+
+      if (gambarWpnLama && gambarWpn) {
+        const pathGambarWpnLama = path.join(
+          __dirname,
+          "../public/images",
+          gambarWpnLama
+        );
+        fs.unlinkSync(pathGambarWpnLama);
+      }
+
+      const data = {
+        nama,
+        type,
+        gambarWpn: gambarWpn || gambarWpnLama,
+      };
+
+      connection.query(
+        "UPDATE weapon SET ? WHERE id = ?",
+        [data, id],
+        (err, rows) => {
+          if (err) {
+            return res.status(500).json({
+              status: false,
+              message: "Server Error",
+            });
+          }
+          return res.status(200).json({
+            status: true,
+            message: "Weapon updated successfully",
+          });
+        }
+      );
+    });
+  }
+);
 
 // Menghapus data senjata berdasarkan ID
 router.delete("/delete/:id", authenticateToken, (req, res) => {

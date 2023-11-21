@@ -1,19 +1,36 @@
 .navbar {
     background-color: transparent !important;
-    position: fixed; /* Change to fixed to keep the navbar fixed at the top */
+    position: fixed; 
     width: 100%; /* Set the width to 100% */
-    z-index: 2; /* Set a higher z-index to ensure the navbar is above other elements */
+    z-index: 2; 
   }
   
   .container {
     display: flex;
     justify-content: space-between;
-    align-items: center; /* Center the items vertically within the container */
-    padding: 10px; /* Add some padding for better appearance */
+    align-items: center;
+    padding: 10px; 
+    font-size: x-large
   }
   
   .navbar-brand,
   .navbar-nav .nav-link {
     color: white !important;
+  }
+
+  .transparent-dropdown .dropdown-menu {
+    background-color: rgba(46, 46, 82, 0.433);
+  } 
+
+  .transparent-dropdown .dropdown-item {
+    color: white;
+  }
+  
+  .transparent-dropdown .dropdown-item:hover {
+    color: black;
+  }
+
+  .transparent-dropdown .dropdown-divider {
+    border-color: white;
   }
   
