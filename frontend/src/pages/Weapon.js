@@ -205,7 +205,10 @@ function Weapon() {
       </video>
       <Container>
         <Row>
-          <div className="gallery" style={{ marginTop: "90px" }}>
+          <div
+            className="gallery"
+            style={{ marginTop: "90px", marginTop: "50px  " }}
+          >
             {weaponList.map((weapon, index) => (
               <div className="gallery-item" key={weapon.id}>
                 <img

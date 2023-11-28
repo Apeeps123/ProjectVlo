@@ -225,9 +225,8 @@ function Agent() {
           style={{
             marginLeft: "20px",
             marginTop: "60px",
-            fontSize: "2rem",
+            fontSize: "1rem",
             fontFamily: " sans-serif",
-            fontWeight: "bold",
           }}
         >
           {selectedAgent && (

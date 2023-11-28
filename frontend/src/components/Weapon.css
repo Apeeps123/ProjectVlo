@@ -1,4 +1,4 @@
-/* Tambahkan CSS di file Anda atau dalam komponen Anda jika menggunakan CSS-in-JS */
+
 .gallery {
   display: flex;
   flex-wrap: wrap;
@@ -11,32 +11,30 @@
   overflow: hidden;
   background: transparent;
   box-shadow: 0 4px 8px rgb(0, 0, 255);
-  padding: 20px;
+  margin-top: 40px;
 }
 
 
 .gallery-item::after{
   content: "";
-position: absolute;
-left: 0;
-top: 0;
-height: 100%;
-width: 100%;
-background-color: rgb(159, 31, 31);
-z-index: -1;
-transition: 0.3s ease all;
-transform: scale(0, 1);
-transform-origin: left right;
-transition: transform 400ms cubic-bezier(0.86, 0, 0.07, 1);
-transition-timing-function: cubic-bezier (0.86, 0, 0.07, 1);
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  background-color: rgb(159, 31, 31);
+  z-index: -1;
+  transition: 0.3s ease all;
+  transform: scale(0, 1);
+  transform-origin: left right;
+  transition: transform 400ms cubic-bezier(0.86, 0, 0.07, 1);
+  transition-timing-function: cubic-bezier (0.86, 0, 0.07, 1);
 }
 
 .gallery-item:hover::after{
-
   transform: scale(1, 1);
   transform-origin:
   top left;
-
 }
 
 .gallery-item:hover .gallery-overlay {
@@ -71,7 +69,6 @@ transition-timing-function: cubic-bezier (0.86, 0, 0.07, 1);
   left: 0;
   right: 0;
   bottom: 0;
-  /* background: rgba(184, 26, 26, 0.666); */
   color: white;
   display: flex;
   flex-direction: column;
@@ -83,12 +80,11 @@ transition-timing-function: cubic-bezier (0.86, 0, 0.07, 1);
 
 .gallery-item:hover .gallery-overlay {
   opacity: 1;
-  /* background: rgba(184, 26, 26, 0.666);  */
 }
 
 
 .gallery-button {
-  background: rgba(255, 255, 255, 0.2); /* Warna latar belakang tombol */
+  background: rgba(255, 255, 255, 0.2); 
   color: white;
   padding: 10px 20px;
   border: none;
