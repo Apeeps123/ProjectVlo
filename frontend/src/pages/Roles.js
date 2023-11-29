@@ -4,6 +4,8 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import videoSource from "../Asset/viper.mp4";
 import "../components/Roles.css";
+import "../components/EditAgent.css";
+
 const url = "http://localhost:3000/static/";
 const token = localStorage.getItem("token");
 const isLoggedIn = !!token;
@@ -196,10 +198,10 @@ function Roles() {
         </table>
       </Row>
       <Modal show={showEditModal} onHide={handleCloseEditModal}>
-        <Modal.Header closeButton>
+        <Modal.Header closeButton className="edit-modal-atas">
           <Modal.Title>Edit Data</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body className="edit-modal-container">
           <form onSubmit={handleUpdate}>
             <div className="mb-3">
               <label className="form-label">Nama Role:</label>
@@ -208,6 +210,10 @@ function Roles() {
                 className="form-control"
                 value={editData.role}
                 onChange={(e) => handleEditDataChange("role", e.target.value)}
+                style={{
+                  background: "rgba(46, 46, 82, 0.433) ",
+                  color: "white",
+                }}
               />
             </div>
 
@@ -220,6 +226,10 @@ function Roles() {
                 onChange={(e) =>
                   handleEditDataChange("icon", e.target.files[0])
                 }
+                style={{
+                  background: "rgba(46, 46, 82, 0.433) ",
+                  color: "white",
+                }}
               />
             </div>
             <button type="submit" className="btn btn-primary">

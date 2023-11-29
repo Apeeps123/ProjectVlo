@@ -69,16 +69,10 @@ function CustomNavbar() {
                 </>
               )}
             </NavDropdown>
-            {isLoggedIn ? (
+            {isLoggedIn && (
               <li className="nav-item">
                 <Link className="nav-link" onClick={handleLogout}>
                   Logout
-                </Link>
-              </li>
-            ) : (
-              <li className="nav-item">
-                <Link className="nav-link" to="/login">
-                  Login
                 </Link>
               </li>
             )}

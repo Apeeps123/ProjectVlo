@@ -4,6 +4,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import videoSource from "../Asset/omen2.mp4";
 import "../../src/components/Weapon.css";
+import "../components/EditAgent.css";
 
 const url = "http://localhost:3000/static/";
 const token = localStorage.getItem("token");
@@ -251,14 +252,21 @@ function Weapon() {
           </div>
         </Row>
         <Modal show={showEditModal} onHide={handleCloseEditModal}>
-          <Modal.Header closeButton>
+          <Modal.Header closeButton className="edit-modal-atas">
             <Modal.Title>Edit Data</Modal.Title>
           </Modal.Header>
-          <Modal.Body>
+          <Modal.Body className="edit-modal-container">
             <form onSubmit={handleUpdate}>
               <div className="mb-3">
                 <label className="form-label">Type:</label>
-                <select className="form-select" onChange={handleType}>
+                <select
+                  className="form-select"
+                  onChange={handleType}
+                  style={{
+                    background: "rgba(46, 46, 82, 0.433) ",
+                    color: "white",
+                  }}
+                >
                   {[
                     "Sidearms",
                     "SMGs",
@@ -277,7 +285,14 @@ function Weapon() {
 
               <div className="mb-3">
                 <label className="form-label">Nama:</label>
-                <select className="form-select" onChange={handleNama}>
+                <select
+                  className="form-select"
+                  onChange={handleNama}
+                  style={{
+                    background: "rgba(46, 46, 82, 0.433) ",
+                    color: "white",
+                  }}
+                >
                   {getWeaponOptionsByType(editData.type).map((weapon) => (
                     <option key={weapon} value={weapon}>
                       {weapon}
@@ -295,6 +310,10 @@ function Weapon() {
                   onChange={(e) =>
                     handleEditDataChange("gambarWpn", e.target.files[0])
                   }
+                  style={{
+                    background: "rgba(46, 46, 82, 0.433) ",
+                    color: "white",
+                  }}
                 />
               </div>
               <button type="submit" className="btn btn-primary">

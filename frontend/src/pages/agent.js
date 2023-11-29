@@ -3,6 +3,7 @@ import Button from "react-bootstrap/Button";
 import { Modal } from "react-bootstrap";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import "../components/EditAgent.css";
 
 const url = "http://localhost:3000/static/";
 const token = localStorage.getItem("token");
@@ -290,60 +291,67 @@ function Agent() {
       </div>
       {isLoggedIn && (
         <Modal show={showEditModal} onHide={handleCloseEditModal}>
-          <Modal.Header closeButton>
+          <Modal.Header closeButton className="edit-modal-atas">
             <Modal.Title>Edit Data</Modal.Title>
           </Modal.Header>
-          <Modal.Body>
-            <form onSubmit={handleUpdate}>
-              <div className="mb-3">
-                <label className="form-label">Nama Agent:</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  value={editData.nama}
-                  onChange={(e) => handleEditDataChange("nama", e.target.value)}
-                />
-              </div>
-              <div className="mb-3">
-                <label className="form-label">Role Agent:</label>
-                <select
-                  className="form-control"
-                  value={editData.role}
-                  onChange={(e) => handleEditDataChange("role", e.target.value)}
-                >
-                  <option value="">Pilih Role</option>
-                  {roles.map((role) => (
-                    <option key={role.id} value={role.id}>
-                      {role.role}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="mb-3">
-                <label className="form-label">Bio Agent:</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  value={editData.bio}
-                  onChange={(e) => handleEditDataChange("bio", e.target.value)}
-                />
-              </div>
-
-              <div className="mb-3">
-                <label className="form-label">Gambar:</label>
-                <input
-                  type="file"
-                  className="form-control"
-                  accept="image/*"
-                  onChange={(e) =>
-                    handleEditDataChange("gambar", e.target.files[0])
-                  }
-                />
-              </div>
-              <button type="submit" className="btn btn-primary">
-                Simpan Perubahan
-              </button>
-            </form>
+          <Modal.Body className="edit-modal-container">
+            <div className="edit-centered-form">
+              <form onSubmit={handleUpdate}>
+                <div className="mb-3">
+                  <label className="form-label">Nama Agent:</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={editData.nama}
+                    onChange={(e) =>
+                      handleEditDataChange("nama", e.target.value)
+                    }
+                  />
+                </div>
+                <div className="mb-3">
+                  <label className="form-label">Role Agent:</label>
+                  <select
+                    className="form-control"
+                    value={editData.role}
+                    onChange={(e) =>
+                      handleEditDataChange("role", e.target.value)
+                    }
+                  >
+                    <option value="">Pilih Role</option>
+                    {roles.map((role) => (
+                      <option key={role.id} value={role.id}>
+                        {role.role}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="mb-3">
+                  <label className="form-label">Bio Agent:</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={editData.bio}
+                    onChange={(e) =>
+                      handleEditDataChange("bio", e.target.value)
+                    }
+                  />
+                </div>
+                <div className="mb-3">
+                  <label className="form-label">Gambar:</label>
+                  <input
+                    type="file"
+                    className="form-control"
+                    accept="image/*"
+                    onChange={(e) =>
+                      handleEditDataChange("gambar", e.target.files[0])
+                    }
+                  />
+                </div>
+                <button type="submit" className="btn btn-primary">
+                  Simpan Perubahan
+                </button>
+              </form>
+            </div>
           </Modal.Body>
         </Modal>
       )}

@@ -4,6 +4,8 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import "../components/Skins.css";
 import videoSource from "../Asset/cypher.mp4";
+import "../components/EditAgent.css";
+
 const url = "http://localhost:3000/static/";
 const token = localStorage.getItem("token");
 const isLoggedIn = !!token;
@@ -131,7 +133,7 @@ function Skins() {
         {
           headers: {
             "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`,     
+            Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -234,10 +236,10 @@ function Skins() {
           </div>
         </Row>
         <Modal show={showEditModal} onHide={handleCloseEditModal}>
-          <Modal.Header closeButton>
+          <Modal.Header closeButton className="edit-modal-atas">
             <Modal.Title>Edit Data</Modal.Title>
           </Modal.Header>
-          <Modal.Body>
+          <Modal.Body className="edit-modal-container">
             <form onSubmit={handleUpdate}>
               <div className="mb-3">
                 <label className="form-label">Nama Weapon:</label>
@@ -246,7 +248,7 @@ function Skins() {
                   value={selectedWeapon}
                   onChange={(e) => handleWeaponChange(e.target.value)}
                   style={{
-                    backgroundColor: "rgba(0, 0, 0, 0.5)",
+                    background: "rgba(46, 46, 82, 0.433) ",
                     color: "white",
                   }}
                 >
@@ -264,6 +266,10 @@ function Skins() {
                   className="form-control"
                   value={editData.skin}
                   onChange={(e) => handleEditDataChange("skin", e.target.value)}
+                  style={{
+                    background: "rgba(46, 46, 82, 0.433) ",
+                    color: "white",
+                  }}
                 />
               </div>
 
@@ -276,6 +282,10 @@ function Skins() {
                   onChange={(e) =>
                     handleEditDataChange("gambar", e.target.files[0])
                   }
+                  style={{
+                    background: "rgba(46, 46, 82, 0.433) ",
+                    color: "white",
+                  }}
                 />
                 {editData.gambarSkinPreview && (
                   <Image

@@ -1,0 +1,96 @@
+/* EditAgent.css */
+.edit-modal-atas {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.858);
+  padding: 20px;
+  box-shadow: 0 0 10px rgb(255, 0, 0), 0 0 0 0 rgba(0, 0, 0, 0); /* menambahkan shadow di atas, kiri, dan kanan, tetapi tidak di bawah */
+  text-align: left;
+  color: white;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.edit-modal-container {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.858);
+    padding: 20px;
+    box-shadow: 0 0 10px rgb(255, 0, 0);
+    text-align: left;
+    color: white;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .edit-centered-form {
+    top: 0;
+    left: 0; 
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.296);
+    padding: 20px;
+    border-radius: 10px; 
+  }
+  
+  .edit-centered-form form {
+    width: 100%;
+    max-width: 400px; 
+  }
+  
+  .edit-centered-form label {
+    display: block;
+    margin-bottom: 5px;
+    color: white;
+  }
+  
+  .edit-centered-form input,
+  .edit-centered-form select,
+  .edit-centered-form textarea,
+  .edit-centered-form button {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    background: rgba(46, 46, 82, 0.433);
+    color: white;
+  }
+  
+  .edit-centered-form input[type="file"] {
+    padding: 10px;
+    margin-bottom: 15px;
+    color: white;
+  }
+  
+  .edit-modal-container button {
+    background-color: #00ff66a9;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .edit-modal-container button:hover {
+    background-color: rgb(106, 83, 190);
+    color: black;
+  }
+  
+  .form-control::placeholder,
+  .form-select::placeholder {
+    color: rgb(227, 49, 49) !important;
+  }
+  
